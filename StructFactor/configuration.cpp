@@ -160,7 +160,6 @@ const vector<double> Configuration::compute_RDF(size_t rdf_size, double r_cut)
 		}
 	}
 
-
 	double Vbox = lx * ly * lz; //volume of system
 	double rho = particle_num / Vbox; //density of system 
 	for (size_t i = 0; i < rdf.size(); i++)
@@ -172,9 +171,6 @@ const vector<double> Configuration::compute_RDF(size_t rdf_size, double r_cut)
 	}
 	return rdf;
 }
-
-
-
 
 double convert_to_period_distance(double distance, double lbox)
 {
@@ -207,7 +203,7 @@ void Configuration_With_Sq::compute_rij()
 
 	//size_t temp_counter = 0;
 	cout << "computing r_ij..." << endl;
-	boost::progress_display progress_displayer(get_particle_num() * (get_particle_num() - 1) / 2);
+	boost::progress_display rij_progress_displayer(get_particle_num() * (get_particle_num() - 1) / 2);
 
 	for (size_t i = 0; i < get_particle().size() - 1; i++)
 	{
@@ -231,7 +227,7 @@ void Configuration_With_Sq::compute_rij()
 			iter_vec_rz_ij++;
 			//temp_counter++;
 			//cout << temp_counter << endl;
-			++progress_displayer;
+			++rij_progress_displayer;
 		}
 	}
 	rij_update_flag = true;
@@ -259,7 +255,7 @@ const vector<double> Configuration_With_Sq::compute_struct_factor(double q_start
 
 	cout << "computing structure factor..." << endl;
 	vector<double> vec_struct_factor(q_size);
-	boost::progress_display progress_displayer(vec_struct_factor.size());
+	boost::progress_display sq_progress_displayer(vec_struct_factor.size());
 	if (direction == "all")
 	{
 
@@ -267,19 +263,19 @@ const vector<double> Configuration_With_Sq::compute_struct_factor(double q_start
 		{
 			double struct_factor = 0;
 			double q = q_start + q_delta * q_index;
-			//double q = get_xhi() - get_xlo()
-			//double qx, qy, qz;
-			//qx = qy = qz = q / sqrt(3);
+			//xdouble q = get_xhi() - get_xlo()
+			//xdouble qx, qy, qz;
+			//xqx = qy = qz = q / sqrt(3);
 			for (size_t i = 0; i < vec_r_ij.size(); i++)
 			{
-				//struct_factor += cos(qx * vec_rx_ij[i] + qy * vec_ry_ij[i] + qz * vec_rz_ij[i]);
+				//xstruct_factor += cos(qx * vec_rx_ij[i] + qy * vec_ry_ij[i] + qz * vec_rz_ij[i]);
 				struct_factor += std::sin(q * vec_r_ij[i]) / q / vec_r_ij[i];
 			}
 			struct_factor *= 2.0;
 			struct_factor = struct_factor / get_particle_num() + 1;
 			//cout << struct_factor_real << endl;
 			vec_struct_factor[q_index] = struct_factor;
-			++progress_displayer;
+			++sq_progress_displayer;
 		}
 	}
 	if (direction == "x")
@@ -296,7 +292,7 @@ const vector<double> Configuration_With_Sq::compute_struct_factor(double q_start
 			struct_factor *= 2.0;
 			struct_factor = struct_factor / get_particle_num() + 1;
 			vec_struct_factor[q_index] = struct_factor;
-			++progress_displayer;
+			++sq_progress_displayer;
 		}
 	}
 
@@ -313,7 +309,7 @@ const vector<double> Configuration_With_Sq::compute_struct_factor(double q_start
 			struct_factor *= 2.0;
 			struct_factor = struct_factor / get_particle_num() + 1;
 			vec_struct_factor[q_index] = struct_factor;
-			++progress_displayer;
+			++sq_progress_displayer;
 		}
 	}
 
@@ -330,7 +326,7 @@ const vector<double> Configuration_With_Sq::compute_struct_factor(double q_start
 			struct_factor *= 2.0;
 			struct_factor = struct_factor / get_particle_num() + 1;
 			vec_struct_factor[q_index] = struct_factor;
-			++progress_displayer;
+			++sq_progress_displayer;
 		}
 	}
 	cout << "struct factor computing finished, time used: ";

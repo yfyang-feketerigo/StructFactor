@@ -55,8 +55,6 @@ public:
 	inline static void SET_HEAD_INFO_LINE(size_t _HEAD_INFO_LINE) { HEAD_INFO_LINE = _HEAD_INFO_LINE; }
 	inline static void SET_GAP_LINE(size_t _GAP_LINE) { GAP_LINE = _GAP_LINE; }
 
-
-
 	inline void set_particle_num(size_t _num) { particle_num = _num; } //set total number of particles
 	inline size_t get_particle_num() const { return particle_num; }	   //return total number of particles
 	inline size_t get_type_num() { return type_num; }				   //return number of particle types
@@ -121,8 +119,6 @@ public:
 
 	inline const vector<double> get_r_ij() { return vec_r_ij; };
 	inline const vector<double> get_rx_ij() { return vec_rx_ij; };
-
-
 };
 
 double convert_to_period_distance(double distance, double lbox);
